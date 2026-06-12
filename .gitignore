@@ -1,0 +1,43 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Environment / secrets
+.env
+.env.*
+!.env.sample
+!.env.example
+
+# Go build/test artifacts
+*.test
+*.out
+*.exe
+
+# Python virtualenv/cache artifacts
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# Node package/cache artifacts
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local temporary output
+tmp/
+*.tmp
+
+# Local Claude/planning scratch files
+CLAUDE.md
+/.agent-shell/
