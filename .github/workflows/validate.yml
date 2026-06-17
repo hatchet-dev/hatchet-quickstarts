@@ -16,6 +16,9 @@ jobs:
         with:
           go-version-file: go.mod
 
+      - name: Go template dependencies are in sync
+        run: go run ./cmd/sync-go-template-deps --check
+
       - name: Generated examples are up to date
         run: go run ./cmd/generate-examples --check
 
