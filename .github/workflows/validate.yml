@@ -1,0 +1,49 @@
+name: validate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6.4.0
+        with:
+          go-version-file: go.mod
+
+      - name: Generated examples are up to date
+        run: go run ./cmd/generate-examples --check
+
+      - name: Build
+        run: go build ./...
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Test
+        run: go test ./...
+
+      - name: Build generated Go example
+        working-directory: examples/simple-go
+        run: go build ./...
+
+      - name: No stray POST_QUICKSTART.md or .embed files under examples
+        run: |
+          matches=$(find examples -name '*POST_QUICKSTART.md' -o -name '*.embed')
+          if [ -n "$matches" ]; then
+            echo "Unexpected files under examples/:"
+            echo "$matches"
+            exit 1
+          fi
+
+      - name: No unrendered template directives under examples
+        run: |
+          if grep -Rn '{{' examples; then
+            echo "Unrendered template directives found under examples/"
+            exit 1
+          fi
