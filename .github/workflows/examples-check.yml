@@ -1,0 +1,39 @@
+name: examples-check
+
+# Generated example install, build, and typecheck checks. This workflow does not
+# run workers or reach a Hatchet engine; runtime behavior is covered by
+# examples-e2e. Kept separate from the validate workflow because it installs
+# three language toolchains.
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6.4.0
+        with:
+          go-version-file: go.mod
+
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.13"
+
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: "24"
+
+      - name: Install Poetry
+        run: pipx install poetry
+
+      - name: Install pnpm
+        run: npm install -g pnpm@10
+
+      - name: Run example checks
+        run: bash hack/check-examples.sh
