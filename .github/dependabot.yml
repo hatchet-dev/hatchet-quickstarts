@@ -1,0 +1,67 @@
+version: 2
+
+# templates/go uses go.mod.embed, which Dependabot cannot target. Its updates
+# come from the Go example through the sync-go-template-deps command.
+multi-ecosystem-groups:
+  hatchet-sdk-examples:
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 1
+
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    cooldown:
+      default-days: 30
+    open-pull-requests-limit: 1
+    groups:
+      github-actions:
+        patterns: ["*"]
+
+  - package-ecosystem: "gomod"
+    directory: "/examples/simple-go"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    cooldown:
+      semver-major-days: 30
+      semver-minor-days: 7
+      semver-patch-days: 3
+    open-pull-requests-limit: 2
+    groups:
+      go-modules:
+        patterns: ["*"]
+        update-types: ["patch", "minor"]
+
+  - package-ecosystem: "pip"
+    directories:
+      - "/examples/simple-python"
+      - "/templates/python/poetry"
+      - "/templates/python/pip"
+    multi-ecosystem-group: "hatchet-sdk-examples"
+    patterns: ["*"]
+
+  - package-ecosystem: "uv"
+    directories:
+      - "/templates/python/uv"
+    multi-ecosystem-group: "hatchet-sdk-examples"
+    patterns: ["*"]
+
+  - package-ecosystem: "npm"
+    directories:
+      - "/examples/simple-typescript"
+      - "/templates/typescript/npm"
+      - "/templates/typescript/pnpm"
+      - "/templates/typescript/yarn"
+    multi-ecosystem-group: "hatchet-sdk-examples"
+    patterns: ["*"]
+
+  - package-ecosystem: "bun"
+    directories:
+      - "/templates/typescript/bun"
+    multi-ecosystem-group: "hatchet-sdk-examples"
+    patterns: ["*"]
