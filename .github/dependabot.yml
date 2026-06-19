@@ -1,7 +1,7 @@
 version: 2
 
-# templates/go uses go.mod.embed, which Dependabot cannot target. Its updates
-# come from the Go example through the sync-go-template-deps command.
+# The Go templates use go.mod.embed, which Dependabot cannot target. Their
+# updates come from the Go examples through the sync-go-template-deps command.
 multi-ecosystem-groups:
   hatchet-sdk-examples:
     schedule:
@@ -23,7 +23,9 @@ updates:
         patterns: ["*"]
 
   - package-ecosystem: "gomod"
-    directory: "/examples/simple-go"
+    directories:
+      - "/examples/simple-go"
+      - "/examples/use-cases/scheduled/go"
     schedule:
       interval: "weekly"
       day: "monday"

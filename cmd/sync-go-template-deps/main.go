@@ -1,10 +1,10 @@
 // Command sync-go-template-deps keeps the embedded Go template dependency files
-// in sync with the generated Go example.
+// in sync with their generated Go examples.
 //
-// The Go template cannot hold a real go.mod, since it sits under the embedded
-// template tree, so it uses go.mod.embed and go.sum. This command keeps those
-// identical to examples/simple-go/go.mod and go.sum. It does not parse versions
-// and does not run go commands.
+// A Go template cannot hold a real go.mod, since it sits under the embedded
+// template tree, so it uses go.mod.embed and go.sum. This command keeps each of
+// those identical to its generated example's go.mod and go.sum. It does not
+// parse versions and does not run go commands.
 //
 // Usage:
 //
@@ -30,6 +30,8 @@ type syncPair struct {
 var pairs = []syncPair{
 	{src: "examples/simple-go/go.mod", dst: "templates/go/go.mod.embed"},
 	{src: "examples/simple-go/go.sum", dst: "templates/go/go.sum"},
+	{src: "examples/use-cases/scheduled/go/go.mod", dst: "templates/use-cases/scheduled/go/go.mod.embed"},
+	{src: "examples/use-cases/scheduled/go/go.sum", dst: "templates/use-cases/scheduled/go/go.sum"},
 }
 
 func main() {

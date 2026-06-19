@@ -27,6 +27,10 @@ structure one level down:
 
 This keeps the default quickstart untouched, avoids collisions with language
 directory names, and lets a future `--use-case` path builder reuse the existing
-overlay of shared and package-manager directories with a different root. No
-use-case templates exist yet. This section records the agreed layout for when
-the first one is added.
+overlay of shared and package-manager directories with a different root.
+
+The first use case is `scheduled`, a Go template at
+`templates/use-cases/scheduled/go/`, with a generated example at
+`examples/use-cases/scheduled/go/`. It registers a cron schedule with the Go
+SDK `WithWorkflowCron` option. The `--use-case` flag itself lives in the main
+Hatchet CLI and is not part of this repo yet.
