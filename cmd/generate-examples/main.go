@@ -32,16 +32,20 @@ type data struct {
 }
 
 type variant struct {
-	name           string // output directory name, e.g. "simple-go"
+	name           string // template data Name, used by {{ .Name }} in templates
 	language       string
 	packageManager string
+	useCase        string // empty for the default simple templates
+	outputDir      string // path under examples/, e.g. "simple-go" or "use-cases/scheduled/go"
 }
 
-// poetry and pnpm are the generated variants because their templates carry lockfiles.
+// poetry and pnpm are the generated package-manager variants because their
+// templates carry lockfiles. scheduled-go is the first use-case variant.
 var variants = []variant{
-	{name: "simple-go", language: "go", packageManager: "go"},
-	{name: "simple-python", language: "python", packageManager: "poetry"},
-	{name: "simple-typescript", language: "typescript", packageManager: "pnpm"},
+	{name: "simple-go", language: "go", packageManager: "go", outputDir: "simple-go"},
+	{name: "simple-python", language: "python", packageManager: "poetry", outputDir: "simple-python"},
+	{name: "simple-typescript", language: "typescript", packageManager: "pnpm", outputDir: "simple-typescript"},
+	{name: "scheduled-go", language: "go", packageManager: "go", useCase: "scheduled", outputDir: filepath.Join("use-cases", "scheduled", "go")},
 }
 
 const examplesDir = "examples"
@@ -68,9 +72,9 @@ func run(check bool) error {
 // runGenerate rewrites examples/ in place, clearing stale output first.
 func runGenerate(fsys fs.FS) error {
 	for _, v := range variants {
-		dst := filepath.Join(examplesDir, v.name)
+		dst := filepath.Join(examplesDir, v.outputDir)
 		if err := generateVariant(fsys, v, dst); err != nil {
-			return fmt.Errorf("generating %s: %w", v.name, err)
+			return fmt.Errorf("generating %s: %w", v.outputDir, err)
 		}
 	}
 	return nil
@@ -87,11 +91,11 @@ func runCheck(fsys fs.FS) error {
 
 	var diffs []string
 	for _, v := range variants {
-		want := filepath.Join(tmpRoot, v.name)
+		want := filepath.Join(tmpRoot, v.outputDir)
 		if err := generateVariant(fsys, v, want); err != nil {
-			return fmt.Errorf("generating %s: %w", v.name, err)
+			return fmt.Errorf("generating %s: %w", v.outputDir, err)
 		}
-		got := filepath.Join(examplesDir, v.name)
+		got := filepath.Join(examplesDir, v.outputDir)
 		diffs = append(diffs, compareTrees(want, got)...)
 	}
 
@@ -108,19 +112,30 @@ func generateVariant(fsys fs.FS, v variant, dst string) error {
 		return err
 	}
 	d := data{Name: v.name, PackageManager: v.packageManager}
-	return processMultiSource(fsys, v.language, v.packageManager, dst, d)
+	return processMultiSource(fsys, v.useCase, v.language, v.packageManager, dst, d)
 }
 
-// processMultiSource mirrors templater.ProcessMultiSource. Go reads its language
-// directory directly. Python and TypeScript overlay the package-manager
-// directory on shared.
-func processMultiSource(fsys fs.FS, language, packageManager, dstDir string, d data) error {
+// templateRoot is the embedded path under which a use case's templates live.
+// The default simple templates live under templates; use-case templates live
+// under templates/use-cases/<use-case>.
+func templateRoot(useCase string) string {
+	if useCase == "" {
+		return "templates"
+	}
+	return path.Join("templates", "use-cases", useCase)
+}
+
+// processMultiSource mirrors templater.ProcessMultiSource, reading from the
+// root for the given use case. Go reads its language directory directly. Python
+// and TypeScript overlay the package-manager directory on shared.
+func processMultiSource(fsys fs.FS, useCase, language, packageManager, dstDir string, d data) error {
+	root := templateRoot(useCase)
 	if language == "go" {
-		return process(fsys, "templates/go", dstDir, d)
+		return process(fsys, path.Join(root, "go"), dstDir, d)
 	}
 
-	sharedDir := path.Join("templates", language, "shared")
-	pkgMgrDir := path.Join("templates", language, packageManager)
+	sharedDir := path.Join(root, language, "shared")
+	pkgMgrDir := path.Join(root, language, packageManager)
 
 	if err := process(fsys, sharedDir, dstDir, d); err != nil {
 		return err

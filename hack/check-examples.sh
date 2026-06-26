@@ -31,6 +31,13 @@ echo "== Go example: build and vet =="
   go vet ./...
 )
 
+echo "== Scheduled use-case example (Go): build and vet =="
+(
+  cd examples/use-cases/scheduled/go
+  go build ./...
+  go vet ./...
+)
+
 echo "== TypeScript example: install and typecheck =="
 (
   cd examples/simple-typescript
