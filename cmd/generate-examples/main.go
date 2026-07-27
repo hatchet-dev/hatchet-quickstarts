@@ -40,12 +40,14 @@ type variant struct {
 }
 
 // poetry and pnpm are the generated package-manager variants because their
-// templates carry lockfiles. scheduled-go is the first use-case variant.
+// templates carry lockfiles.
 var variants = []variant{
 	{name: "simple-go", language: "go", packageManager: "go", outputDir: "simple-go"},
 	{name: "simple-python", language: "python", packageManager: "poetry", outputDir: "simple-python"},
 	{name: "simple-typescript", language: "typescript", packageManager: "pnpm", outputDir: "simple-typescript"},
 	{name: "scheduled-go", language: "go", packageManager: "go", useCase: "scheduled", outputDir: filepath.Join("use-cases", "scheduled", "go")},
+	{name: "scheduled-python", language: "python", packageManager: "poetry", useCase: "scheduled", outputDir: filepath.Join("use-cases", "scheduled", "python")},
+	{name: "scheduled-typescript", language: "typescript", packageManager: "pnpm", useCase: "scheduled", outputDir: filepath.Join("use-cases", "scheduled", "typescript")},
 }
 
 const examplesDir = "examples"

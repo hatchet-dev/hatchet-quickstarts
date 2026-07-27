@@ -29,8 +29,9 @@ This keeps the default quickstart untouched, avoids collisions with language
 directory names, and lets a future `--use-case` path builder reuse the existing
 overlay of shared and package-manager directories with a different root.
 
-The first use case is `scheduled`, a Go template at
-`templates/use-cases/scheduled/go/`, with a generated example at
-`examples/use-cases/scheduled/go/`. It registers a cron schedule with the Go
-SDK `WithWorkflowCron` option. The `--use-case` flag itself lives in the main
-Hatchet CLI and is not part of this repo yet.
+The first use case is `scheduled`, with templates for Go, Python, and
+TypeScript under `templates/use-cases/scheduled/` and generated examples under
+`examples/use-cases/scheduled/`. Each language registers a cron schedule with
+its SDK (`WithWorkflowCron` in Go, `on_crons` in Python, the `on` cron option
+in TypeScript) and defines a `manual-run` trigger for on-demand runs. The
+`--use-case` flag itself lives in the main Hatchet CLI.

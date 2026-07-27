@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Runtime end-to-end test for the generated examples.
 #
-# It starts one local Hatchet engine, then for each selected language starts the
-# generated worker, triggers the workflow, and asserts the trigger exits zero
-# with the expected output. Workers and containers are removed on exit.
+# It starts one local Hatchet engine, then for each selected language starts
+# each generated worker (simple and scheduled), runs its trigger, and asserts
+# the trigger exits zero with the expected output. Workers and containers are removed on exit.
 #
 # Readiness comes from the trigger itself: the worker is started, then the
 # trigger is retried within a bounded window until it succeeds or the worker
@@ -53,8 +53,12 @@ kill_tree() {
 clean_example_artifacts() {
   rm -rf examples/simple-python/.venv \
          examples/simple-typescript/node_modules \
-         examples/simple-typescript/dist
-  find examples/simple-python -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+         examples/simple-typescript/dist \
+         examples/use-cases/scheduled/python/.venv \
+         examples/use-cases/scheduled/typescript/node_modules \
+         examples/use-cases/scheduled/typescript/dist
+  find examples/simple-python examples/use-cases/scheduled/python \
+    -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
 }
 
 cleanup() {
@@ -80,7 +84,7 @@ require docker
 docker info >/dev/null 2>&1 || { echo "ERROR: docker daemon is not available" >&2; exit 2; }
 
 run_language() {
-  local lang="$1" dir="$2"; shift 2
+  local lang="$1" dir="$2" trigger="$3"; shift 3
   local expected=("$@")
   local logf="$LOGDIR/${lang}-worker.log"
   local trigf="$LOGDIR/${lang}-trigger.log"
@@ -100,7 +104,7 @@ run_language() {
       tail -40 "$logf" >&2 || true
       return 1
     fi
-    if ( cd "$dir" && timeout "$TRIGGER_TIMEOUT" hatchet trigger simple --profile local ) >"$trigf" 2>&1; then
+    if ( cd "$dir" && timeout "$TRIGGER_TIMEOUT" hatchet trigger "$trigger" --profile local ) >"$trigf" 2>&1; then
       ok=1
       break
     fi
@@ -137,9 +141,18 @@ hatchet server start --profile local --tag "$SERVER_TAG"
 
 for lang in $LANGUAGES; do
   case "$lang" in
-    go)         run_language go         examples/simple-go         "hello, world!" ;;
-    python)     run_language python     examples/simple-python     "42" ;;
-    typescript) run_language typescript examples/simple-typescript "Hello, world!" "Hello, moon!" ;;
+    go)
+      run_language go examples/simple-go simple "hello, world!"
+      run_language go-scheduled examples/use-cases/scheduled/go manual-run "hello from a manual run"
+      ;;
+    python)
+      run_language python examples/simple-python simple "42"
+      run_language python-scheduled examples/use-cases/scheduled/python manual-run "hello from a manual run"
+      ;;
+    typescript)
+      run_language typescript examples/simple-typescript simple "Hello, world!" "Hello, moon!"
+      run_language typescript-scheduled examples/use-cases/scheduled/typescript manual-run "hello from a manual run"
+      ;;
     *) echo "ERROR: unknown language '${lang}'" >&2; exit 2 ;;
   esac
 done
