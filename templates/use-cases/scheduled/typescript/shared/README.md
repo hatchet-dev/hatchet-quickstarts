@@ -9,15 +9,17 @@ For detailed setup instructions, see the [Hatchet Setup Guide](https://docs.hatc
 
 Before running this project, make sure you have the following:
 
-1. [Node.js v16 or higher](https://nodejs.org/en/download)
+{{- if eq .PackageManager "bun"}}
+1. [Bun](https://bun.sh/) runtime and package manager
+{{- else}}
+1. [Node.js 22 or later](https://nodejs.org/en/download)
 {{- if eq .PackageManager "npm"}}
 2. npm package manager (included with Node.js)
 {{- else if eq .PackageManager "pnpm"}}
 2. [pnpm](https://pnpm.io/installation) package manager
 {{- else if eq .PackageManager "yarn"}}
 2. [Yarn](https://yarnpkg.com/getting-started/install) package manager
-{{- else if eq .PackageManager "bun"}}
-2. [Bun](https://bun.sh/) runtime and package manager
+{{- end}}
 {{- end}}
 
 ## Setup

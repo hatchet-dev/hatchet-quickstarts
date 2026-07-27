@@ -5,8 +5,7 @@ This is an example project demonstrating how to use Hatchet with TypeScript. For
 ## Prerequisites
 
 Before running this project, make sure you have the following:
-
-1. [Node.js v16 or higher](https://nodejs.org/en/download)
+1. [Node.js 22 or later](https://nodejs.org/en/download)
 2. [pnpm](https://pnpm.io/installation) package manager
 
 ## Setup

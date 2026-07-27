@@ -1,6 +1,7 @@
 package quickstarts_test
 
 import (
+	"encoding/json"
 	"io/fs"
 	"path"
 	"slices"
@@ -200,6 +201,36 @@ func TestAllCombinationsRender(t *testing.T) {
 				}
 				if strings.Contains(readme, "git clone") {
 					t.Error("README still contains retired clone instructions")
+				}
+				if strings.Contains(readme, "Node.js v16") {
+					t.Error("README still contains the stale Node.js v16 baseline")
+				}
+				if c.language == "typescript" {
+					if c.packageManager == "bun" {
+						// The bun scripts run entirely through bun, so a
+						// Node requirement would be false.
+						if strings.Contains(readme, "Node.js") {
+							t.Error("bun README claims a Node.js requirement")
+						}
+					} else if !strings.Contains(readme, "Node.js 22 or later") {
+						t.Error("README does not state the Node.js 22 baseline")
+					}
+				}
+			}
+
+			if c.language == "typescript" {
+				client := files["src/hatchet-client.ts"]
+				if !strings.Contains(client, "from '@hatchet-dev/typescript-sdk/v1'") {
+					t.Error("hatchet-client.ts does not import from the v1 subpath")
+				}
+				// The package root re-exports the modules that emit the v0
+				// deprecation warning on worker startup.
+				if strings.Contains(client, "from '@hatchet-dev/typescript-sdk'") {
+					t.Error("hatchet-client.ts still imports from the package root")
+				}
+				var tsconfig map[string]any
+				if err := json.Unmarshal([]byte(files["tsconfig.json"]), &tsconfig); err != nil {
+					t.Errorf("tsconfig.json does not parse as JSON: %v", err)
 				}
 			}
 
