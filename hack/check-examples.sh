@@ -19,8 +19,12 @@ cd "$repo_root"
 clean_example_artifacts() {
   rm -rf examples/simple-python/.venv \
          examples/simple-typescript/node_modules \
-         examples/simple-typescript/dist
-  find examples/simple-python -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+         examples/simple-typescript/dist \
+         examples/use-cases/scheduled/python/.venv \
+         examples/use-cases/scheduled/typescript/node_modules \
+         examples/use-cases/scheduled/typescript/dist
+  find examples/simple-python examples/use-cases/scheduled/python \
+    -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
 }
 trap clean_example_artifacts EXIT
 
@@ -48,6 +52,20 @@ echo "== TypeScript example: install and typecheck =="
 echo "== Python example: install and byte-compile =="
 (
   cd examples/simple-python
+  poetry install --no-interaction
+  poetry run python -m compileall -q src
+)
+
+echo "== Scheduled use-case example (TypeScript): install and typecheck =="
+(
+  cd examples/use-cases/scheduled/typescript
+  pnpm install --frozen-lockfile
+  pnpm exec tsc --noEmit
+)
+
+echo "== Scheduled use-case example (Python): install and byte-compile =="
+(
+  cd examples/use-cases/scheduled/python
   poetry install --no-interaction
   poetry run python -m compileall -q src
 )

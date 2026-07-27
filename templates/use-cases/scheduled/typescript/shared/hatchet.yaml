@@ -1,0 +1,31 @@
+dev:
+{{- if eq .PackageManager "npm"}}
+  preCmds: ["npm install"]
+  runCmd: "npm start"
+{{- else if eq .PackageManager "pnpm"}}
+  preCmds: ["pnpm install"]
+  runCmd: "pnpm start"
+{{- else if eq .PackageManager "yarn"}}
+  preCmds: ["yarn install"]
+  runCmd: "yarn start"
+{{- else if eq .PackageManager "bun"}}
+  preCmds: ["bun install"]
+  runCmd: "bun start"
+{{- end}}
+  files:
+    - "**/*.ts"
+    - "!**/node_modules/**"
+  reload: true
+
+triggers:
+  - name: manual-run
+    description: "Run the scheduled workflow once on demand"
+{{- if eq .PackageManager "npm"}}
+    command: "npm run run:manual"
+{{- else if eq .PackageManager "pnpm"}}
+    command: "pnpm run run:manual"
+{{- else if eq .PackageManager "yarn"}}
+    command: "yarn run:manual"
+{{- else if eq .PackageManager "bun"}}
+    command: "bun run run:manual"
+{{- end}}

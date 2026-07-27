@@ -37,9 +37,6 @@ env/
 .env
 .env.local
 
-# Poetry
-poetry.lock
-
 # OS
 .DS_Store
 Thumbs.db

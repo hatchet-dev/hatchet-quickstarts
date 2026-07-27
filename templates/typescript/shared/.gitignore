@@ -27,9 +27,3 @@ logs/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-# Lock files (package manager specific)
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-bun.lockb
