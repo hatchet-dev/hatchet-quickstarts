@@ -23,11 +23,13 @@ export const scheduled = hatchet.workflow<ScheduledInput, ScheduledOutput>({
 
 scheduled.task({
   name: 'scheduled-task',
+  // If a cron run carries no input the SDK passes null, so we return an
+  // empty string to avoid null errors.
   fn: (input) => {
     console.log('scheduled task ran');
 
     return {
-      message: input.message ?? '',
+      message: input?.message ?? '',
       ranAt: new Date().toISOString(),
     };
   },
