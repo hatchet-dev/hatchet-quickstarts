@@ -29,6 +29,7 @@ import (
 type data struct {
 	Name           string
 	PackageManager string
+	HatchetVersion string
 }
 
 type variant struct {
@@ -39,8 +40,25 @@ type variant struct {
 	outputDir      string // path under examples/, e.g. "simple-go" or "use-cases/scheduled/go"
 }
 
+// dependencyFiles are owned by the examples, not the templates: templates ship
+// no lockfiles (installers resolve the latest SDK at scaffold time) and go.mod
+// renders its version from template data. Dependabot maintains these files in
+// examples/ directly, so generation neither writes nor checks them.
+var dependencyFiles = map[string]bool{
+	"go.mod":            true,
+	"go.sum":            true,
+	"poetry.lock":       true,
+	"uv.lock":           true,
+	"requirements.lock": true,
+	"package-lock.json": true,
+	"pnpm-lock.yaml":    true,
+	"yarn.lock":         true,
+	"bun.lock":          true,
+	"bun.lockb":         true,
+}
+
 // poetry and pnpm are the generated package-manager variants because their
-// templates carry lockfiles.
+// examples carry lockfiles.
 var variants = []variant{
 	{name: "simple-go", language: "go", packageManager: "go", outputDir: "simple-go"},
 	{name: "simple-python", language: "python", packageManager: "poetry", outputDir: "simple-python"},
@@ -110,11 +128,50 @@ func runCheck(fsys fs.FS) error {
 }
 
 func generateVariant(fsys fs.FS, v variant, dst string) error {
-	if err := os.RemoveAll(dst); err != nil {
+	if err := clearGenerated(dst); err != nil {
 		return err
 	}
-	d := data{Name: v.name, PackageManager: v.packageManager}
+	d := data{Name: v.name, PackageManager: v.packageManager, HatchetVersion: "v0.0.0-local"}
 	return processMultiSource(fsys, v.useCase, v.language, v.packageManager, dst, d)
+}
+
+// clearGenerated removes previously generated output under dst, keeping the
+// example-owned dependency files in place. Directories left empty are pruned.
+func clearGenerated(dst string) error {
+	var files, dirs []string
+	err := filepath.WalkDir(dst, func(path string, entry fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if path == dst {
+			return nil
+		}
+		if entry.IsDir() {
+			dirs = append(dirs, path)
+			return nil
+		}
+		if !dependencyFiles[entry.Name()] {
+			files = append(files, path)
+		}
+		return nil
+	})
+	if os.IsNotExist(err) {
+		return nil
+	}
+	if err != nil {
+		return err
+	}
+
+	for _, f := range files {
+		if err := os.Remove(f); err != nil {
+			return err
+		}
+	}
+	sort.Sort(sort.Reverse(sort.StringSlice(dirs)))
+	for _, d := range dirs {
+		os.Remove(d)
+	}
+	return nil
 }
 
 // templateRoot is the embedded path under which a use case's templates live.
@@ -167,6 +224,10 @@ func process(fsys fs.FS, srcDir, dstDir string, d data) error {
 
 		if entry.IsDir() {
 			return os.MkdirAll(dstPath, 0755)
+		}
+
+		if dependencyFiles[filepath.Base(dstPath)] {
+			return nil
 		}
 
 		content, err := fs.ReadFile(subFS, srcPath)
@@ -235,6 +296,9 @@ func snapshot(root string) (map[string][]byte, error) {
 			return err
 		}
 		if entry.IsDir() {
+			return nil
+		}
+		if dependencyFiles[entry.Name()] {
 			return nil
 		}
 		rel, err := filepath.Rel(root, path)

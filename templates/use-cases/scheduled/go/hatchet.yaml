@@ -1,5 +1,5 @@
 dev:
-  preCmds: ["go mod download"]
+  preCmds: ["go mod tidy"]
   runCmd: "go run ./cmd/worker"
   files:
     - "**/*.go"
