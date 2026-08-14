@@ -1,9 +1,6 @@
 version: 2
 
-# Templates ship no lockfiles and render the Go SDK version from CLI data, so
-# only the generated examples carry pinned dependencies. Dependabot keeps them
-# current; CI installs and e2e-runs them, proving the templates still work
-# against the latest SDKs.
+# Only examples/ pin dependencies; templates resolve SDK versions at scaffold time.
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"

@@ -40,10 +40,8 @@ type variant struct {
 	outputDir      string // path under examples/, e.g. "simple-go" or "use-cases/scheduled/go"
 }
 
-// dependencyFiles are owned by the examples, not the templates: templates ship
-// no lockfiles (installers resolve the latest SDK at scaffold time) and go.mod
-// renders its version from template data. Dependabot maintains these files in
-// examples/ directly, so generation neither writes nor checks them.
+// dependencyFiles live only in examples/, maintained by dependabot; generation
+// neither writes nor checks them.
 var dependencyFiles = map[string]bool{
 	"go.mod":            true,
 	"go.sum":            true,
@@ -135,8 +133,7 @@ func generateVariant(fsys fs.FS, v variant, dst string) error {
 	return processMultiSource(fsys, v.useCase, v.language, v.packageManager, dst, d)
 }
 
-// clearGenerated removes previously generated output under dst, keeping the
-// example-owned dependency files in place. Directories left empty are pruned.
+// clearGenerated removes generated output under dst, keeping dependency files.
 func clearGenerated(dst string) error {
 	var files, dirs []string
 	err := filepath.WalkDir(dst, func(path string, entry fs.DirEntry, err error) error {

@@ -38,8 +38,6 @@ var packageManagersByLanguage = map[string][]string{
 	"go":         {"go"},
 }
 
-// testHatchetVersion stands in for the CLI's own version, which the templater
-// passes so go.mod pins the SDK release matching the CLI build.
 const testHatchetVersion = "v1.2.3-test"
 
 func allCombos() []combo {
