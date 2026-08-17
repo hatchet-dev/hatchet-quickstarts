@@ -55,6 +55,12 @@ var dependencyFiles = map[string]bool{
 	"bun.lockb":         true,
 }
 
+var artifactDirs = map[string]bool{
+	"node_modules": true,
+	"dist":         true,
+	".venv":        true,
+}
+
 // poetry and pnpm are the generated package-manager variants because their
 // examples carry lockfiles.
 var variants = []variant{
@@ -144,6 +150,9 @@ func clearGenerated(dst string) error {
 			return nil
 		}
 		if entry.IsDir() {
+			if artifactDirs[entry.Name()] {
+				return filepath.SkipDir
+			}
 			dirs = append(dirs, path)
 			return nil
 		}
@@ -293,6 +302,9 @@ func snapshot(root string) (map[string][]byte, error) {
 			return err
 		}
 		if entry.IsDir() {
+			if artifactDirs[entry.Name()] {
+				return filepath.SkipDir
+			}
 			return nil
 		}
 		if dependencyFiles[entry.Name()] {

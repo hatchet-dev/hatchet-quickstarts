@@ -1,6 +1,5 @@
 version: 2
 
-# Only examples/ pin dependencies; templates resolve SDK versions at scaffold time.
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -35,6 +34,10 @@ updates:
     directories:
       - "/examples/simple-python"
       - "/examples/use-cases/scheduled/python"
+      - "/templates/python/poetry"
+      - "/templates/python/pip"
+      - "/templates/use-cases/scheduled/python/poetry"
+      - "/templates/use-cases/scheduled/python/pip"
     schedule:
       interval: "weekly"
       day: "monday"
@@ -47,10 +50,21 @@ updates:
     directories:
       - "/examples/simple-typescript"
       - "/examples/use-cases/scheduled/typescript"
+      - "/templates/typescript/npm"
+      - "/templates/typescript/pnpm"
+      - "/templates/typescript/yarn"
+      - "/templates/typescript/bun"
+      - "/templates/use-cases/scheduled/typescript/npm"
+      - "/templates/use-cases/scheduled/typescript/pnpm"
+      - "/templates/use-cases/scheduled/typescript/yarn"
+      - "/templates/use-cases/scheduled/typescript/bun"
     schedule:
       interval: "weekly"
       day: "monday"
     open-pull-requests-limit: 2
+    ignore:
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
     groups:
       typescript-examples:
         patterns: ["*"]

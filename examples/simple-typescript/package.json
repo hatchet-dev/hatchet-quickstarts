@@ -4,8 +4,8 @@
   "description": "This is an example project demonstrating how to use Hatchet with Typescript.",
   "main": "index.js",
   "scripts": {
-    "start": "npx ts-node src/worker.ts",
-    "run:simple": "npx ts-node src/run.ts",
+    "start": "ts-node src/worker.ts",
+    "run:simple": "ts-node src/run.ts",
     "build": "tsc --outDir dist"
   },
   "keywords": [],
@@ -14,7 +14,7 @@
   "devDependencies": {
     "@types/node": "^26.2.0",
     "ts-node": "^10.9.2",
-    "typescript": "^7.0.2"
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "@hatchet-dev/typescript-sdk": "^1.28.2",

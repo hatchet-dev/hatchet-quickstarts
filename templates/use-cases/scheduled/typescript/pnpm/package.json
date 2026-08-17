@@ -4,20 +4,20 @@
   "description": "Scheduled Hatchet workflow example in TypeScript.",
   "main": "index.js",
   "scripts": {
-    "start": "npx ts-node src/worker.ts",
-    "run:manual": "npx ts-node src/run.ts",
+    "start": "ts-node src/worker.ts",
+    "run:manual": "ts-node src/run.ts",
     "build": "tsc --outDir dist"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^22.19.19",
+    "@types/node": "^26.2.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },
   "dependencies": {
     "@hatchet-dev/typescript-sdk": "^1.28.2",
-    "zod": "^3.25.0"
+    "zod": "^4.4.3"
   }
 }
