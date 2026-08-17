@@ -2,7 +2,7 @@ module github.com/hatchet-dev/hatchet-go-quickstart
 
 go 1.26
 
-require github.com/hatchet-dev/hatchet v0.98.9
+require github.com/hatchet-dev/hatchet v0.101.13
 
 require (
 	cel.dev/expr v0.25.1 // indirect
