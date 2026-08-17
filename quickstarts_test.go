@@ -38,6 +38,8 @@ var packageManagersByLanguage = map[string][]string{
 	"go":         {"go"},
 }
 
+const testHatchetVersion = "v1.2.3-test"
+
 func allCombos() []combo {
 	var combos []combo
 	for _, useCase := range []string{"", "scheduled"} {
@@ -75,7 +77,8 @@ func render(t *testing.T, c combo) map[string]string {
 	data := struct {
 		Name           string
 		PackageManager string
-	}{Name: "render-test", PackageManager: c.packageManager}
+		HatchetVersion string
+	}{Name: "render-test", PackageManager: c.packageManager, HatchetVersion: testHatchetVersion}
 
 	out := map[string]string{}
 	for _, dir := range dirs {
@@ -183,6 +186,12 @@ func TestAllCombinationsRender(t *testing.T) {
 			manifest := files[manifestByPackageManager[c.packageManager]]
 			if !strings.Contains(manifest, sdkDependencyByLanguage[c.language]) {
 				t.Errorf("manifest does not declare the SDK dependency %s", sdkDependencyByLanguage[c.language])
+			}
+			if c.language == "go" {
+				want := "github.com/hatchet-dev/hatchet " + testHatchetVersion
+				if !strings.Contains(manifest, want) {
+					t.Errorf("go.mod does not pin the templated SDK version, want %q in:\n%s", want, manifest)
+				}
 			}
 			// Every TypeScript variant except bun runs its scripts through
 			// npx ts-node, and npx falls back to fetching ts-node at run
