@@ -12,18 +12,18 @@ importers:
   .:
     dependencies:
       '@hatchet-dev/typescript-sdk':
-        specifier: ^1.28.2
-        version: 1.28.2(@grpc/grpc-js@1.14.4)(zod@4.4.3)
+        specifier: ^1.33.2
+        version: 1.33.2(@grpc/grpc-js@1.14.4)(debug@4.4.3)(zod@4.6.5)
       zod:
-        specifier: ^4.4.3
-        version: 4.4.3
+        specifier: ^4.6.5
+        version: 4.6.5
     devDependencies:
       '@types/node':
-        specifier: ^26.2.0
-        version: 26.2.0
+        specifier: ^26.6.2
+        version: 26.6.2
       ts-node:
         specifier: ^10.9.2
-        version: 10.9.2(@types/node@26.2.0)(typescript@5.9.3)
+        version: 10.9.2(@types/node@26.6.2)(typescript@5.9.3)
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -46,8 +46,9 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
 
-  '@hatchet-dev/typescript-sdk@1.28.2':
-    resolution: {integrity: sha512-L7OJTQvHMpconB9hGv67zg/pcpm04TODw6Kmo05U+jR0WHBBcVrepe/VlxxdXoNSgowOawpYnmA3jpgKKo+8dA==}
+  '@hatchet-dev/typescript-sdk@1.33.2':
+    resolution: {integrity: sha512-OSLYGK8inrWfB3N9bepAcjpCZSFEYjpMPPp9f/iX9CD6V5XAl/O4FZoPblgUBN9MJj9k1/6XBGZJFLyZQiDHsA==}
+    engines: {node: '>=20'}
     peerDependencies:
       '@anthropic-ai/claude-agent-sdk': ^0.3.148
       '@grpc/grpc-js': ^1.14.3
@@ -134,8 +135,8 @@ packages:
   '@tsconfig/node16@1.0.4':
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
 
-  '@types/node@26.2.0':
-    resolution: {integrity: sha512-5IviulTZeRNp2vAJ514cc/HUlY5nZ9fCbq9DMyC52BrhFZACo3nI0R7qBxhQmo/d27NFe96ur/b7Wwxklda+kg==}
+  '@types/node@26.6.2':
+    resolution: {integrity: sha512-X1P21scMv4zGKLYqjdGjaKa7COa0RKVYYZZN/NfvLQ1JegxFhdhpZG/Lyn8AXx6CDUavKAd11v6BvfpkDByK8g==}
 
   '@types/qs@6.15.1':
     resolution: {integrity: sha512-GZHUBZR9hckSUhrxmp1nG6NwdpM9fCunJwyThLW1X3AyHgd9IlHb6VANpQQqDr2o/qQp6McZ3y/IA2rVzKzSbw==}
@@ -396,8 +397,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  undici-types@8.3.0:
-    resolution: {integrity: sha512-j375ScV60dom+YkPFIfTLcOiPxkN/buHz5GobjLhixFuANaNs3C9l4GmrWqejgXWJ7BbJcFYpTEUkS1Ge8bpZQ==}
+  undici-types@8.9.0:
+    resolution: {integrity: sha512-KTDyRTYX8sWmKXAikPHHSyc63CRPETMctyjKFupcC6OBLXT3xsN0e9aF7m+mIXutFWpUXuedtowG7iLOzp0kQg==}
 
   v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
@@ -432,8 +433,8 @@ packages:
     peerDependencies:
       zod: ^3.25.28 || ^4
 
-  zod@4.4.3:
-    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
+  zod@4.6.5:
+    resolution: {integrity: sha512-v5l/aFXZQeai4awLbOpSoHecE9UiMrnfx75tEXLjNonXVARxQ5mOeipTjROUchszUNCqnE+hqAMujRsRHsut2Q==}
 
 snapshots:
 
@@ -455,12 +456,12 @@ snapshots:
       protobufjs: 7.6.5
       yargs: 17.7.3
 
-  '@hatchet-dev/typescript-sdk@1.28.2(@grpc/grpc-js@1.14.4)(zod@4.4.3)':
+  '@hatchet-dev/typescript-sdk@1.33.2(@grpc/grpc-js@1.14.4)(debug@4.4.3)(zod@4.6.5)':
     dependencies:
       '@bufbuild/protobuf': 2.13.0
       '@types/qs': 6.15.1
       abort-controller-x: 0.5.0
-      axios: 1.18.1
+      axios: 1.18.1(debug@4.4.3)
       long: 5.3.2
       nice-grpc: 2.1.16
       nice-grpc-common: 2.0.3
@@ -468,8 +469,8 @@ snapshots:
       qs: 6.15.3
       semver: 7.8.5
       yaml: 2.9.0
-      zod: 4.4.3
-      zod-to-json-schema: 3.25.2(zod@4.4.3)
+      zod: 4.6.5
+      zod-to-json-schema: 3.25.2(zod@4.6.5)
     optionalDependencies:
       '@grpc/grpc-js': 1.14.4
     transitivePeerDependencies:
@@ -515,9 +516,9 @@ snapshots:
 
   '@tsconfig/node16@1.0.4': {}
 
-  '@types/node@26.2.0':
+  '@types/node@26.6.2':
     dependencies:
-      undici-types: 8.3.0
+      undici-types: 8.9.0
 
   '@types/qs@6.15.1': {}
 
@@ -545,9 +546,9 @@ snapshots:
 
   asynckit@0.4.0: {}
 
-  axios@1.18.1:
+  axios@1.18.1(debug@4.4.3):
     dependencies:
-      follow-redirects: 1.16.0
+      follow-redirects: 1.16.0(debug@4.4.3)
       form-data: 4.0.6
       https-proxy-agent: 5.0.1
       proxy-from-env: 2.1.0
@@ -616,7 +617,9 @@ snapshots:
 
   escalade@3.2.0: {}
 
-  follow-redirects@1.16.0: {}
+  follow-redirects@1.16.0(debug@4.4.3):
+    optionalDependencies:
+      debug: 4.4.3
 
   form-data@4.0.6:
     dependencies:
@@ -708,7 +711,7 @@ snapshots:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.2
-      '@types/node': 26.2.0
+      '@types/node': 26.6.2
       long: 5.3.2
 
   proxy-from-env@2.1.0: {}
@@ -762,14 +765,14 @@ snapshots:
 
   ts-error@1.0.6: {}
 
-  ts-node@10.9.2(@types/node@26.2.0)(typescript@5.9.3):
+  ts-node@10.9.2(@types/node@26.6.2)(typescript@5.9.3):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.12
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 26.2.0
+      '@types/node': 26.6.2
       acorn: 8.17.0
       acorn-walk: 8.3.5
       arg: 4.1.3
@@ -782,7 +785,7 @@ snapshots:
 
   typescript@5.9.3: {}
 
-  undici-types@8.3.0: {}
+  undici-types@8.9.0: {}
 
   v8-compile-cache-lib@3.0.1: {}
 
@@ -810,8 +813,8 @@ snapshots:
 
   yn@3.1.1: {}
 
-  zod-to-json-schema@3.25.2(zod@4.4.3):
+  zod-to-json-schema@3.25.2(zod@4.6.5):
     dependencies:
-      zod: 4.4.3
+      zod: 4.6.5
 
-  zod@4.4.3: {}
+  zod@4.6.5: {}
