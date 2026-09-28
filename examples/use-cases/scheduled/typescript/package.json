@@ -12,12 +12,12 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^26.2.0",
+    "@types/node": "^26.6.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@hatchet-dev/typescript-sdk": "^1.28.2",
-    "zod": "^4.4.3"
+    "@hatchet-dev/typescript-sdk": "^1.33.2",
+    "zod": "^4.6.5"
   }
 }
